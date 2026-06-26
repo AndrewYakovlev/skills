@@ -1,0 +1,4 @@
+interface:
+  display_name: "Secure SSH Server"
+  short_description: "Harden SSH access for Debian/Ubuntu VPS"
+  default_prompt: "Use $secure-ssh-server to harden SSH access on a Debian or Ubuntu VPS."

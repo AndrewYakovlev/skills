@@ -8,7 +8,7 @@ Include by default unless the user says the host is already managed:
 
 - OS update and reboot window
 - non-root deploy user with sudo as needed
-- SSH keys, optional custom SSH port, password login policy
+- passwordless SSH key access for the deploy user, optional custom SSH port, password login policy
 - firewall allowing SSH, HTTP, HTTPS, and only explicitly required app ports
 - fail2ban or equivalent SSH brute-force protection
 - unattended security upgrades
@@ -16,7 +16,7 @@ Include by default unless the user says the host is already managed:
 - swap on small VPS instances
 - log rotation and disk usage checks
 
-Avoid locking yourself out. Keep the current SSH session open and verify a new login before tightening SSH.
+Avoid locking yourself out. Keep the current SSH session open and verify a new key-based login before tightening SSH.
 
 ## Nginx and TLS
 

@@ -15,12 +15,15 @@ Suggested stack question:
 
 ```text
 What should this server support? Select all that apply:
-Base hardening, deploy user, SSH keys, firewall, fail2ban, nginx, TLS/certbot,
-Docker/Compose, Python, Django, FastAPI, Node.js, Go, Postgres,
-MySQL/MariaDB, MongoDB, Redis, queues/workers, backups, monitoring, CI deploy.
+Base hardening, deploy user, passwordless SSH key access, firewall, fail2ban,
+nginx, TLS/certbot, Docker/Compose, Python, Django, FastAPI, Node.js, Go,
+Postgres, MySQL/MariaDB, MongoDB, Redis, queues/workers, backups, monitoring,
+CI deploy.
 
 Also share: OS/version, domain names, repository URL, SSH user/host, and whether
-this is a fresh server or a shared server with existing projects.
+this is a fresh server or a shared server with existing projects. For
+passwordless SSH, share the public key to install, or confirm that Codex should
+help generate/use an existing local public key.
 ```
 
 If the user asks for hands-on execution and gives SSH access, audit first and only then change the host.
@@ -44,8 +47,11 @@ If the user asks for hands-on execution and gives SSH access, audit first and on
    - Never disable root/password SSH, restart shared services, replace nginx configs, remove packages, drop databases, or rotate firewall rules without a verified fallback path.
 
 4. Apply base setup.
-   - Patch packages, set timezone, configure hostname, add a deploy user, install core utilities, configure SSH, firewall, fail2ban, unattended upgrades, swap if needed, and log retention.
-   - Keep SSH open while testing a new login in a second session.
+   - Patch packages, set timezone, configure hostname, add a deploy user, install core utilities, configure passwordless SSH key access, firewall, fail2ban, unattended upgrades, swap if needed, and log retention.
+   - Treat base hardening as incomplete until a non-root key-based login works and the firewall allows only expected inbound ports.
+   - Keep the current SSH session open while testing a new login in a second session.
+   - Never disable password login or root login until the new key-based session has been verified.
+   - For post-bootstrap SSH lockdown, custom SSH ports, `AllowUsers`, advanced firewall rules, or port knocking, use the `secure-ssh-server` skill.
 
 5. Apply selected stack profiles.
    - Read `references/stack-profiles.md` for component-specific decisions and expected outputs.

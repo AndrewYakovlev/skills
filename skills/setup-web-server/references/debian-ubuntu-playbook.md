@@ -41,6 +41,7 @@ sudo apt install -y build-essential pkg-config
 ## Deploy User
 
 Use a project-specific deploy user on shared hosts when isolation matters.
+Ask for the public SSH key to install, or help the user generate or locate one before running these commands.
 
 ```bash
 sudo adduser deploy
@@ -49,7 +50,20 @@ sudo install -d -m 700 -o deploy -g deploy /home/deploy/.ssh
 sudo install -m 600 -o deploy -g deploy /tmp/authorized_keys /home/deploy/.ssh/authorized_keys
 ```
 
-Verify login before changing SSH policy.
+To append one public key without replacing existing keys:
+
+```bash
+printf '%s\n' '<public-ssh-key>' | sudo tee -a /home/deploy/.ssh/authorized_keys >/dev/null
+sudo chown deploy:deploy /home/deploy/.ssh/authorized_keys
+sudo chmod 600 /home/deploy/.ssh/authorized_keys
+sudo chmod 700 /home/deploy/.ssh
+```
+
+Verify key-based login in a second session before changing SSH policy:
+
+```bash
+ssh deploy@<server-host>
+```
 
 ## SSH Hardening
 
@@ -68,6 +82,20 @@ sudo systemctl reload ssh
 
 Do not disable root or password login until a new key-based session works.
 
+## Baseline Security
+
+Apply these controls for normal production servers unless the host is already managed by another security policy:
+
+```bash
+sudo timedatectl set-timezone UTC
+sudo dpkg-reconfigure -f noninteractive unattended-upgrades
+sudo systemctl enable --now fail2ban
+sudo systemctl enable --now unattended-upgrades
+sudo systemctl status fail2ban --no-pager
+```
+
+Use the user's timezone when they provide one. On shared hosts, audit existing policies before changing global settings.
+
 ## Firewall
 
 Keep the active SSH port open.
@@ -85,6 +113,8 @@ If SSH uses a custom port, allow it before enabling UFW:
 ```bash
 sudo ufw allow <ssh-port>/tcp
 ```
+
+On shared hosts, inspect existing rules first and add only the project-specific ports that are required.
 
 ## Nginx Site Pattern
 
