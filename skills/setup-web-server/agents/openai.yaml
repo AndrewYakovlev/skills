@@ -1,0 +1,4 @@
+interface:
+  display_name: "Setup Web Server"
+  short_description: "Prepare production web servers"
+  default_prompt: "Use $setup-web-server to plan a new production web server setup."
